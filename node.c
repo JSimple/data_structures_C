@@ -37,9 +37,9 @@ int main() {
     printf("before appending:\n");
     print_list(node1);
     putchar('\n');
-    append_node(node1, 8);
+    append_node(&node1, 8);
     printf("after appending:\n");
-    print_list(node1);
+    print_list(node3);
 }
 
 // for next time:
@@ -57,19 +57,20 @@ void print_list(struct node head) {
 
 // LEFT OFF HERE.
 // this function doesn't seem to be appending our new node to the actual list
-void append_node(struct node head, int new_value) {
-    if (head.next == NULL) {
-        printf("found the end!\n");
+
+// USE MALLOC
+void append_node(struct node *head, int new_value) {
+    if (head->next == NULL) {
         struct node new_node;
         new_node.value = new_value;
         new_node.next = NULL;
 
         printf("new node value to be inserted: %i\n", new_node.value);
 
-        head.next = &new_node;
+        head->next = &new_node;
     } else {
         printf("not there yet...");
-        append_node(*head.next, new_value);
+        append_node(head->next, new_value);
     }
 }
 
