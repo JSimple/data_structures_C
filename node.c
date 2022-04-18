@@ -8,6 +8,7 @@ void print_list();
 void append_node();
 struct node *prepend_node();
 struct node *make_node();
+struct node *insert_node();
 
 struct node {
     int value;
@@ -78,3 +79,16 @@ struct node *make_node(int new_value){
 }
 
 // TODO: insert node, prepend node, delete node
+
+struct node *insert_node(int new_value, int idx) {
+    // step idx nodes through linked list
+    // prepend new_node to current_node.next
+    // current_node.next = &new_node
+
+    // return pointer to new node
+
+    // ERROR HANDLING: MAKE SURE WE DON'T EXCEED THE LENGTH OF THE LIST
+}
+
+// DELETE NODE:
+// logic similar to insert_node, but we will have to deal with deallocation
