@@ -6,6 +6,7 @@
 
 void print_list();
 void append_node();
+struct node *prepend_node();
 struct node *make_node();
 
 struct node {
@@ -13,28 +14,31 @@ struct node {
     struct node *next;
 };
 
+/* struct linked_list { */
+/*     struct node *head; */
+/* }; */
 
 int main() {
-    struct node node1;
-    node1.value = 5;
+    struct node *node1 = make_node(5);
 
-    struct node node2;
-    node2.value = 6;
+    /* struct linked_list ll; */
+    /* ll.head = &node1; */
 
-    node1.next = &node2;
+    append_node(node1, 6);
+    append_node(node1, 7);
+    append_node(node1, 8);
 
-    struct node node3;
-    node3.value = 7;
-    node3.next = NULL;
 
-    node2.next = &node3;
 
-    printf("before appending:\n");
-    print_list(node1);
-    putchar('\n');
-    append_node(&node1, 8);
     printf("after appending:\n");
-    print_list(node1);
+    print_list(*node1);
+
+    printf("prepending a node...\n");
+
+    struct node *new_head = prepend_node(node1, 4);
+
+    printf("after prepending:\n");
+    print_list(*new_head);
 }
 
 void print_list(struct node head) {
@@ -57,6 +61,13 @@ void append_node(struct node *head, int new_value) {
         printf("not there yet...");
         append_node(head->next, new_value);
     }
+}
+
+// returns pointer to new node so we are able to test it in main()
+struct node *prepend_node(struct node *head, int new_value) {
+    struct node *new_node = make_node(new_value);
+    new_node->next = head;
+    return new_node;
 }
 
 struct node *make_node(int new_value){
