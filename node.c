@@ -5,10 +5,11 @@
 #define TRUE 1
 
 void print_list();
-void append_node();
+struct node *append_node();
 struct node *prepend_node();
 struct node *make_node();
 struct node *insert_node();
+int delete_node();
 
 struct node {
     int value;
@@ -21,25 +22,21 @@ struct node {
 
 int main() {
     struct node *node1 = make_node(5);
+    delete_node(node1);
+    printf("%i", node1->value);
+    struct node *node2 = make_node(6);
+    append_node(node2, 7);
+    append_node(node2, 8);
+    append_node(node2, 9);
 
-    /* struct linked_list ll; */
-    /* ll.head = &node1; */
+    // printf("before inserting:\n");
+    // print_list(*node1);
 
-    append_node(node1, 6);
-    append_node(node1, 7);
-    append_node(node1, 8);
+    // insert_node(node1, 8, 3);
 
+    // printf("after inserting:\n");
+    // print_list(*node1);
 
-
-    printf("after appending:\n");
-    print_list(*node1);
-
-    printf("prepending a node...\n");
-
-    struct node *new_head = prepend_node(node1, 4);
-
-    printf("after prepending:\n");
-    print_list(*new_head);
 }
 
 void print_list(struct node head) {
@@ -51,16 +48,30 @@ void print_list(struct node head) {
     }
 }
 
-void append_node(struct node *head, int new_value) {
+struct node *make_node(int new_value){
+    struct node *new_node = (struct node *) malloc(sizeof(struct node));
+    new_node->value = new_value;
+    new_node->next = NULL;
+    return new_node;
+}
+
+int delete_node(struct node *garbage_node){
+    if (garbage_node->value){
+        free(garbage_node);
+        return 1;
+    }
+    return 0;
+}
+
+struct node *append_node(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
-
-        printf("new node value to be inserted: %i\n", new_node->value);
-
+        // printf("new node value to be inserted: %i\n", new_node->value);
         head->next = new_node;
+        return new_node;
     } else {
-        printf("not there yet...");
-        append_node(head->next, new_value);
+        // printf("not there yet...");
+        return append_node(head->next, new_value);
     }
 }
 
@@ -71,24 +82,22 @@ struct node *prepend_node(struct node *head, int new_value) {
     return new_node;
 }
 
-struct node *make_node(int new_value){
-    struct node *new_node = (struct node *) malloc(sizeof(struct node));
-    new_node->value = new_value;
-    new_node->next = NULL;
-    return new_node;
+struct node *insert_node(struct node *head, int new_value, int idx) {
+    if (head->next == NULL){
+       struct node *new_node = append_node(head->next,new_value);
+       return new_node;
+    }
+    else if (idx <= 1){
+       struct node *new_node = prepend_node(head->next,new_value);
+       head->next = new_node;
+       return new_node;
+    }
+    return insert_node(head->next, new_value, idx-1);
 }
 
-// TODO: insert node, prepend node, delete node
 
-struct node *insert_node(int new_value, int idx) {
-    // step idx nodes through linked list
-    // prepend new_node to current_node.next
-    // current_node.next = &new_node
 
-    // return pointer to new node
+// TODO: insert node, pop
 
-    // ERROR HANDLING: MAKE SURE WE DON'T EXCEED THE LENGTH OF THE LIST
-}
-
-// DELETE NODE:
-// logic similar to insert_node, but we will have to deal with deallocation
+// remove node: takes head and idx, stitches list together after removing node at idx, returns &removed_node
+// pop: set 2nd to last node's pointer to NULL, return orphaned node
