@@ -1,20 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FALSE 0
-#define TRUE 1
-
-void print_list();
-struct node *append_node();
-struct node *prepend_node();
-struct node *make_node();
-struct node *insert_node();
-int delete_node();
-
 struct node {
     int value;
     struct node *next;
 };
+
+void print_list(struct node);
+struct node *push_end_node(struct node*, int);
+struct node *push_node(struct node*, int);
+struct node *make_node(int);
+struct node *insert_node(struct node*, int, int);
+int delete_node(struct node*);
 
 /* struct linked_list { */
 /*     struct node *head; */
@@ -63,7 +60,7 @@ int delete_node(struct node *garbage_node){
     return 0;
 }
 
-struct node *append_node(struct node *head, int new_value) {
+struct node *push_end_node(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
         // printf("new node value to be inserted: %i\n", new_node->value);
@@ -71,12 +68,12 @@ struct node *append_node(struct node *head, int new_value) {
         return new_node;
     } else {
         // printf("not there yet...");
-        return append_node(head->next, new_value);
+        return push_end_node(head->next, new_value);
     }
 }
 
 // returns pointer to new node so we are able to test it in main()
-struct node *prepend_node(struct node *head, int new_value) {
+struct node *push_node(struct node *head, int new_value) {
     struct node *new_node = make_node(new_value);
     new_node->next = head;
     return new_node;
@@ -84,11 +81,11 @@ struct node *prepend_node(struct node *head, int new_value) {
 
 struct node *insert_node(struct node *head, int new_value, int idx) {
     if (head->next == NULL){
-       struct node *new_node = append_node(head->next,new_value);
+       struct node *new_node = push_end_node(head->next,new_value);
        return new_node;
     }
     else if (idx <= 1){
-       struct node *new_node = prepend_node(head->next,new_value);
+       struct node *new_node = push_node(head->next,new_value);
        head->next = new_node;
        return new_node;
     }
