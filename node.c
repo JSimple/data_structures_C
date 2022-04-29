@@ -6,11 +6,13 @@ struct node {
     struct node *next;
 };
 
-void print_list(struct node);
-struct node *push_end_node(struct node*, int);
+void print_list(struct node*);
 struct node *push_node(struct node*, int);
+struct node *pop_node(struct node*);
+struct node *push_end_node(struct node*, int);
 struct node *make_node(int);
 struct node *insert_node(struct node*, int, int);
+struct node *remove_node(struct node*, int);
 int delete_node(struct node*);
 
 /* struct linked_list { */
@@ -18,13 +20,19 @@ int delete_node(struct node*);
 /* }; */
 
 int main() {
-    struct node *node1 = make_node(5);
-    delete_node(node1);
-    printf("%i", node1->value);
-    struct node *node2 = make_node(6);
-    append_node(node2, 7);
-    append_node(node2, 8);
-    append_node(node2, 9);
+    struct node *head = make_node(6);
+    push_end_node(head, 7);
+    push_end_node(head, 8);
+    push_end_node(head, 9);
+    push_end_node(head, 10);
+    printf("LIST BEFORE REMOVE\n");
+    print_list(head);
+    struct node *removed = remove_node(head, 5);
+    printf("memory loc of removed node: %i\n", removed);
+    printf("removed's value: %i\n", removed->value);
+    printf("LIST AFTER REMOVE:\n");
+    print_list(head);
+
 
     // printf("before inserting:\n");
     // print_list(*node1);
@@ -36,12 +44,13 @@ int main() {
 
 }
 
-void print_list(struct node head) {
-    if (head.next == NULL) {
-        printf("%i\n", head.value);
+// change so it takes a pointer
+void print_list(struct node *head) {
+    if (head->next == NULL) {
+        printf("%i\n", head->value);
     } else {
-        printf("%i\n", head.value);
-        print_list(*head.next);
+        printf("%i\n", head->value);
+        print_list(head->next);
     }
 }
 
@@ -60,6 +69,30 @@ int delete_node(struct node *garbage_node){
     return 0;
 }
 
+// returns pointer to new node so we are able to test it in main()
+struct node *push_node(struct node *head, int new_value) {
+    struct node *new_node = make_node(new_value);
+    new_node->next = head;
+    return new_node;
+}
+
+// pop: set 2nd to last node's pointer to NULL, return orphaned node
+struct node *pop_node(struct node *head){
+    //account for edge case where list is 1 node
+    if (head->next == NULL){
+        printf("List is just one node. Stop trying to pop!");
+        return head;
+    }
+    if (head->next->next == NULL) {
+        struct node *popped_node = head->next;
+        head->next = NULL; 
+        return popped_node;
+    } else {
+        // printf("not there yet...");
+        return pop_node(head->next);
+    }
+}
+
 struct node *push_end_node(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
@@ -70,13 +103,6 @@ struct node *push_end_node(struct node *head, int new_value) {
         // printf("not there yet...");
         return push_end_node(head->next, new_value);
     }
-}
-
-// returns pointer to new node so we are able to test it in main()
-struct node *push_node(struct node *head, int new_value) {
-    struct node *new_node = make_node(new_value);
-    new_node->next = head;
-    return new_node;
 }
 
 struct node *insert_node(struct node *head, int new_value, int idx) {
@@ -92,9 +118,28 @@ struct node *insert_node(struct node *head, int new_value, int idx) {
     return insert_node(head->next, new_value, idx-1);
 }
 
-
-
-// TODO: insert node, pop
+struct node *remove_node(struct node *head, int idx){
+    if (head->next == NULL){
+        printf("List is just one node. Stop trying to remove nodes!");
+        return head;
+    }
+    if (head->next->next == NULL){
+        if (idx > 1){
+            printf("Index exceeds list length!");
+            return head->next;
+        }
+        else {
+            struct node *removed_node = head->next;
+            return pop_node(head);
+        }
+    }
+    else if(idx <= 1){
+        struct node *removed_node = head->next;
+        head->next = removed_node->next;
+        removed_node->next = NULL;
+        return removed_node;
+    }
+    return remove_node(head->next, idx-1);
+}
 
 // remove node: takes head and idx, stitches list together after removing node at idx, returns &removed_node
-// pop: set 2nd to last node's pointer to NULL, return orphaned node
