@@ -1,26 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+TODO:
+    change remove_node so that it works like insert_node
+    create remove_before and remove_after to use in remove_node
+    make sure we've implemented all singly linked list methods on DLL
+
+    .....then, work on trees
+*/
+
 struct node {
     int value;
     struct node *next;
     struct node *prev;
 };
-// vocabulary:
-// add_to
-// remove_from
-// beginning
-// end
-// insert_at_index
+
 void print_list(struct node*);
 void print_reverse_list(struct node*);
-struct node *push_node(struct node*, int);
-struct node *pop_node(struct node*);
-struct node *pop_given_tail(struct node*);
-struct node *pop_given_head(struct node*);
-struct node *push_given_head(struct node*);
-struct node *push_given_tail(struct node*);
-struct node *push_end_node(struct node*, int);
+struct node *insert_before(struct node*, int);
+struct node *insert_after(struct node*, int);
+struct node *remove_from_end(struct node*);
+struct node *add_to_end(struct node*, int);
 struct node *make_node(int);
 struct node *insert_node(struct node*, int, int);
 struct node *remove_node(struct node*, int);
@@ -43,27 +44,55 @@ int main() {
     node2->next = node3;
     node3->prev = node2;
 
-    struct node *node4 = make_node(4);
+    struct node *node4 = make_node(5);
     node3->next = node4;
     node4->prev = node3;
 
-    struct node *node5 = make_node(5);
+    struct node *node5 = make_node(6);
     node4->next = node5;
     node5->prev = node4;
 
-    printf("LIST BEFORE POP\n");
+    /* INSERT NODE TESTS
+        index too big
+        index too small
+        index is 0
+        insert into different places in the middle
+        add to end
+        add to beginning
+    */
+
+
+    printf("Initial list:\n");
     print_list(head);
-    struct node *popped = pop_node(head);
 
-    printf("LIST AFTER POP\n");
+    head = insert_node(node3, 0, -100);
+
+    printf("List after adding node to beginning:\n");
     print_list(head);
 
-    printf("POPPED NODE: %i\n", popped->value);
+    struct node *new_middle_node = insert_node(node5, 4, -2);
 
-    // push_end_node(head, 7);
-    // push_end_node(head, 8);
-    // push_end_node(head, 9);
-    // push_end_node(head, 10);
+    printf("List after adding node to middle:\n");
+    print_list(head);
+
+    struct node *new_end_node = insert_node(node5, 7, 1);
+
+    printf("List after adding node to end:\n");
+    print_list(head);
+
+    printf("Trying to insert a node at 'index 0':\n");
+
+    struct node *bad_node = insert_node(head, 100, 0);
+    print_list(head);
+
+    printf("Bad node: %i\n", bad_node);
+
+
+
+    // add_to_end(head, 7);
+    // add_to_end(head, 8);
+    // add_to_end(head, 9);
+    // add_to_end(head, 10);
     // printf("LIST BEFORE REMOVE\n");
     // print_list(head);
     // struct node *removed = remove_node(head, 5);
@@ -119,15 +148,34 @@ int delete_node(struct node *garbage_node){
 }
 
 // returns pointer to new node so we are able to test it in main()
-struct node *push_node(struct node *head, int new_value) {
+struct node *insert_before(struct node *current_node, int new_value) {
     struct node *new_node = make_node(new_value);
-    new_node->next = head;
-    head->prev = new_node;
+    new_node->next = current_node;
+
+    if (current_node->prev != NULL) {
+        new_node->prev = current_node->prev;
+        current_node->prev->next = new_node;
+    }
+
+    current_node->prev = new_node;
+    return new_node;
+}
+
+struct node *insert_after(struct node *current_node, int new_value) {
+    struct node *new_node = make_node(new_value);
+    new_node->prev = current_node;
+
+    if (current_node->next != NULL) {
+        new_node->next = current_node->next;
+        current_node->next->prev = new_node;
+    }
+
+    current_node->next = new_node;
     return new_node;
 }
 
 // pop: set 2nd to last node's pointer to NULL, return orphaned node
-struct node *pop_node(struct node *head){
+struct node *remove_from_end(struct node *head){
     if (head->next == NULL) {
         //account for edge case where list is 1 node
         if (head->prev == NULL) {
@@ -139,13 +187,11 @@ struct node *pop_node(struct node *head){
         return head;
     } else {
         // printf("not there yet...");
-        return pop_node(head->next);
+        return remove_from_end(head->next);
     }
 }
 
-
-
-struct node *push_end_node(struct node *head, int new_value) {
+struct node *add_to_end(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
         // printf("new node value to be inserted: %i\n", new_node->value);
@@ -154,28 +200,28 @@ struct node *push_end_node(struct node *head, int new_value) {
         return new_node;
     } else {
         // printf("not there yet...");
-        return push_end_node(head->next, new_value);
+        return add_to_end(head->next, new_value);
     }
 }
 
-// TO DO
 struct node *insert_node(struct node *current_node, int new_value, int idx) {
     if (idx > 0) {
         if (current_node->next == NULL){
-            struct node *new_node = push_end_node(current_node->next, new_value);
+            struct node *new_node = insert_after(current_node, new_value);
             return new_node;
-        }
-        else if (idx <= 1){
-            struct node *new_node = push_node(current_node->next, new_value);
-            current_node->next = new_node;
-            new_node->prev = current_node;
+        } else if (idx == 1){
+            struct node *new_node = insert_after(current_node, new_value);
             return new_node;
         }
         return insert_node(current_node->next, new_value, idx-1);
     } else if (idx < 0) {
         if (current_node->prev == NULL) {
-            ; 
+           struct node *new_node = insert_before(current_node, new_value);
+           return new_node;
+        } else if (idx == -1) {
+            struct node *new_node = insert_before(current_node, new_value);
         }
+        return insert_node(current_node->prev, new_value, idx+1);
     } else {
         printf("Please enter a non-zero integer for the index!\n");
         return NULL;
@@ -194,7 +240,7 @@ struct node *remove_node(struct node *head, int idx){
         }
         else {
             struct node *removed_node = head->next;
-            return pop_node(head);
+            return remove_from_end(head);
         }
     }
     else if(idx <= 1){
