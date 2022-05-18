@@ -6,11 +6,20 @@ struct node {
     struct node *next;
     struct node *prev;
 };
-
+// vocabulary:
+// add_to
+// remove_from
+// beginning
+// end
+// insert_at_index
 void print_list(struct node*);
 void print_reverse_list(struct node*);
 struct node *push_node(struct node*, int);
 struct node *pop_node(struct node*);
+struct node *pop_given_tail(struct node*);
+struct node *pop_given_head(struct node*);
+struct node *push_given_head(struct node*);
+struct node *push_given_tail(struct node*);
 struct node *push_end_node(struct node*, int);
 struct node *make_node(int);
 struct node *insert_node(struct node*, int, int);
@@ -134,6 +143,8 @@ struct node *pop_node(struct node *head){
     }
 }
 
+
+
 struct node *push_end_node(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
@@ -147,6 +158,7 @@ struct node *push_end_node(struct node *head, int new_value) {
     }
 }
 
+// TO DO
 struct node *insert_node(struct node *current_node, int new_value, int idx) {
     if (idx > 0) {
         if (current_node->next == NULL){
@@ -162,7 +174,7 @@ struct node *insert_node(struct node *current_node, int new_value, int idx) {
         return insert_node(current_node->next, new_value, idx-1);
     } else if (idx < 0) {
         if (current_node->prev == NULL) {
-            ;
+            ; 
         }
     } else {
         printf("Please enter a non-zero integer for the index!\n");
