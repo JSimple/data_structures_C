@@ -228,29 +228,88 @@ struct node *insert_node(struct node *current_node, int new_value, int idx) {
     }
 }
 
-struct node *remove_node(struct node *head, int idx){
-    if (head->next == NULL){
-        printf("List is just one node. Stop trying to remove nodes!");
-        return head;
-    }
-    if (head->next->next == NULL){
-        if (idx > 1){
-            printf("Index exceeds list length!");
-            return head->next;
+
+struct node *remove_node(struct node *current_node, int idx) {
+    if (idx == 0){
+        if (current_node->next != NULL && current_node->prev != NULL){
+            current_node->prev->next = current_node->next;
+            current_node->next->prev = current_node->prev;
+            current_node->next, current_node->prev = NULL;
+            return current_node;
         }
-        else {
-            struct node *removed_node = head->next;
-            return remove_from_end(head);
+        else if (current_node->next != NULL){
+            current_node->next->prev, current_node->next = NULL;
+            return current_node;
+        }
+        else if (current_node->prev != NULL){
+            current_node->prev->next, current_node->prev = NULL;
+            return current_node;
+        }
+        else{
+            return current_node;
         }
     }
-    else if(idx <= 1){
-        struct node *removed_node = head->next;
-        head->next = removed_node->next;
-        removed_node->next = NULL;
-        return removed_node;
+    if (idx > 0){
+        if (current_node->next == NULL){
+            return (remove_node(current_node, 0));
+        }
+        return(remove_node(current_node->next, idx-1));
     }
-    return remove_node(head->next, idx-1);
+    else{
+        if (current_node->prev == NULL){
+            return (remove_node(current_node, 0));
+        }
+        return(remove_node(current_node->prev, idx+1));
+    }
+
+    if (idx > 0) {
+        if (current_node->next == NULL){
+
+            //struct node *new_node = remove_after(current_node);
+            return new_node;
+        } else if (idx == 1){
+            //struct node *new_node = remove_after(current_node);
+            return new_node;
+        }
+        return remove_node(current_node->next, idx-1);
+    } else if (idx < 0) {
+        if (current_node->prev == NULL) {
+           //struct node *new_node = remove_before(current_node);
+           return new_node;
+        } else if (idx == -1) {
+            //struct node *new_node = remove_before(current_node);
+        }
+        return remove_node(current_node->prev, idx+1);
+    } else {
+        //printf("Please enter a non-zero integer for the index!\n"); remove current node
+        return NULL;
+    }
 }
+
+
+// struct node *remove_node(struct node *current_node, int idx){
+//     if (current_node->next == NULL){
+//         printf("List is just one node. Stop trying to remove nodes!");
+//         return current_node;
+//     }
+//     if (current_node->next->next == NULL){
+//         if (idx > 1){
+//             printf("Index exceeds list length!");
+//             return current_node->next;
+//         }
+//         else {
+//             struct node *removed_node = current_node->next;
+//             return remove_from_end(current_node);
+//         }
+//     }
+//     else if(idx <= 1){
+//         struct node *removed_node = current_node->next;
+//         current_node->next = removed_node->next;
+//         removed_node->next = NULL;
+//         return removed_node;
+//     }
+//     return remove_node(current_node->next, idx-1);
+// }
 
 struct node *return_head(struct node *tail) {
     if (tail->prev == NULL) {
