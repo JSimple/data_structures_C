@@ -6,8 +6,9 @@ TODO:
     change remove_node so that it works like insert_node
     create remove_before and remove_after to use in remove_node
     make sure we've implemented all singly linked list methods on DLL
-
+    //add a curser structure?
     .....then, work on trees
+    recusive is not a great idea - maybe rewrite everything itterativley or just compile w optimizations
 */
 
 struct node {
@@ -112,7 +113,7 @@ int main() {
 
 }
 
-// change so it takes a pointer
+//TODO: safe version that stops when you reach your head pointer - safeguards against circle problems
 void print_list(struct node *head) {
     if (head->next == NULL) {
         printf("%i\n", head->value);
@@ -122,6 +123,7 @@ void print_list(struct node *head) {
     }
 }
 
+//have it take tail
 void print_reverse_list(struct node *head) {
     if (head->next == NULL) {
         printf("%i\n", head->value);
@@ -140,14 +142,10 @@ struct node *make_node(int new_value){
 }
 
 int delete_node(struct node *garbage_node){
-    if (garbage_node->value){
-        free(garbage_node);
-        return 1;
-    }
-    return 0;
+    free(garbage_node);
 }
 
-// returns pointer to new node so we are able to test it in main()
+
 struct node *insert_before(struct node *current_node, int new_value) {
     struct node *new_node = make_node(new_value);
     new_node->next = current_node;
@@ -174,12 +172,12 @@ struct node *insert_after(struct node *current_node, int new_value) {
     return new_node;
 }
 
-// pop: set 2nd to last node's pointer to NULL, return orphaned node
+
 struct node *remove_from_end(struct node *head){
     if (head->next == NULL) {
         //account for edge case where list is 1 node
         if (head->prev == NULL) {
-            printf("List is just one node. Stop trying to pop!");
+            printf("List is just one node. Stop trying to remove the last node!");
             return head;
         }
         head->prev->next = NULL;
@@ -191,6 +189,7 @@ struct node *remove_from_end(struct node *head){
     }
 }
 
+// re-write using insert after
 struct node *add_to_end(struct node *head, int new_value) {
     if (head->next == NULL) {
         struct node *new_node = make_node(new_value);
@@ -220,6 +219,7 @@ struct node *insert_node(struct node *current_node, int new_value, int idx) {
            return new_node;
         } else if (idx == -1) {
             struct node *new_node = insert_before(current_node, new_value);
+            return new_node;
         }
         return insert_node(current_node->prev, new_value, idx+1);
     } else {
@@ -231,23 +231,33 @@ struct node *insert_node(struct node *current_node, int new_value, int idx) {
 
 struct node *remove_node(struct node *current_node, int idx) {
     if (idx == 0){
-        if (current_node->next != NULL && current_node->prev != NULL){
-            current_node->prev->next = current_node->next;
+        if (current_node->next != NULL) {
             current_node->next->prev = current_node->prev;
-            current_node->next, current_node->prev = NULL;
-            return current_node;
         }
-        else if (current_node->next != NULL){
-            current_node->next->prev, current_node->next = NULL;
-            return current_node;
+        if (current_node->prev != NULL) {
+            current_node->prev->next = current_node->next;
         }
-        else if (current_node->prev != NULL){
-            current_node->prev->next, current_node->prev = NULL;
-            return current_node;
-        }
-        else{
-            return current_node;
-        }
+        current_node->next = NULL;
+        current_node->prev = NULL;
+        return current_node;
+
+        // if (current_node->next != NULL && current_node->prev != NULL){
+        //     current_node->prev->next = current_node->next;
+        //     current_node->next->prev = current_node->prev;
+        //     current_node->next, current_node->prev = NULL;
+        //     return current_node;
+        // }
+        // else if (current_node->next != NULL){
+        //     current_node->next->prev, current_node->next = NULL;
+        //     return current_node;
+        // }
+        // else if (current_node->prev != NULL){
+        //     current_node->prev->next, current_node->prev = NULL;
+        //     return current_node;
+        // }
+        // else{
+        //     return current_node;
+        // }
     }
     if (idx > 0){
         if (current_node->next == NULL){
