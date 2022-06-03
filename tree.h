@@ -18,8 +18,9 @@ struct tree {
 };
 
 // inserts a node and returns pointer to newly added node
-treenode * insert_node(int val, int side, treenode * node);
-
-
+treenode * insert_node(treenode*, int val, int side);
+treenode * insert_sorted(treenode * root, int val);
+int side_is_full(treenode * node, int side);
+int print_tree(treenode * node);
 int print_tree_hello ();
 #endif // TREE_H_

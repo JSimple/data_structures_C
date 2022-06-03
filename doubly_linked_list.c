@@ -55,103 +55,37 @@ int main() {
     node3->next = node4;
     node4->prev = node3;
 
-    struct node *node6 = make_node(6);
-    node4->next = node6;
-    node6->prev = node4;
+    struct node *node5 = make_node(5);
+    node4->next = node5;
+    node5->prev = node4;
 
-    printf("List before adding nodes:\n");
+    printf("List before removing node:\n");
     print_list_i(head);
 
-    struct node *node5 = insert_node_i(head, 5, 4);
+    struct node *removed_node = remove_node_i(node5, 800);
 
-    printf("List after adding first node (5):\n");
+    printf("List after removing last node (5):\n");
     print_list_i(head);
 
-    struct node *node7 = insert_node_i(head, 7, 6);
+    printf("removed node");
+    printf("%i, value: %i", removed_node, removed_node->value);
 
-    printf("List after adding second node (7):\n");
-    print_list_i(head);
+    // struct node *node7 = insert_node_i(head, 7, 6);
 
-    struct node *node_neg_1 = insert_node_i(node5, -1, -5);
-
-    printf("List after adding third node (-1):\n");
-    print_list_i(node_neg_1);
-
-    struct node *node0 = insert_node_i(node5, 0, -5);
-
-    printf("List after adding third node (0):\n");
-    print_list_i(node_neg_1);
-
-
-
-
-    // struct node *added_end_node = add_to_end_i(head, 6);
-
-    // printf("List after adding end node:\n");
+    // printf("List after adding second node (7):\n");
     // print_list_i(head);
 
-    // struct node *added_beginning_node = add_to_beginning_i(node4, 0);
+    // struct node *node_neg_1 = insert_node_i(node5, -1, -5);
 
-    // printf("List after adding beginning node:\n");
-    // print_reverse_list_i(added_end_node);
+    // printf("List after adding third node (-1):\n");
+    // print_list_i(node_neg_1);
 
-    /* INSERT NODE TESTS
-        index too big
-        index too small
-        index is 0
-        insert into different places in the middle
-        add to end
-        add to beginning
-    */
+    // struct node *node0 = insert_node_i(node5, 0, -5);
+
+    // printf("List after adding third node (0):\n");
+    // print_list_i(node_neg_1);
 
 
-    // printf("Initial list:\n");
-    // print_list(head);
-
-    // head = insert_node(node3, 0, -100);
-
-    // printf("List after adding node to beginning:\n");
-    // print_list(head);
-
-    // struct node *new_middle_node = insert_node(node5, 4, -2);
-
-    // printf("List after adding node to middle:\n");
-    // print_list(head);
-
-    // struct node *new_end_node = insert_node(node5, 7, 1);
-
-    // printf("List after adding node to end:\n");
-    // print_list(head);
-
-    // printf("Trying to insert a node at 'index 0':\n");
-
-    // struct node *bad_node = insert_node(head, 100, 0);
-    // print_list(head);
-
-    // printf("Bad node: %i\n", bad_node);
-
-
-
-    // add_to_end(head, 7);
-    // add_to_end(head, 8);
-    // add_to_end(head, 9);
-    // add_to_end(head, 10);
-    // printf("LIST BEFORE REMOVE\n");
-    // print_list(head);
-    // struct node *removed = remove_node(head, 5);
-    // printf("memory loc of removed node: %i\n", removed);
-    // printf("removed's value: %i\n", removed->value);
-    // printf("LIST AFTER REMOVE:\n");
-    // print_list(head);
-
-
-    // printf("before inserting:\n");
-    // print_list(*node1);
-
-    // insert_node(node1, 8, 3);
-
-    // printf("after inserting:\n");
-    // print_list(*node1);
 
 }
 
@@ -344,6 +278,18 @@ struct node *insert_node_i(struct node *current_node, int new_value, int idx) {
     }
 }
 
+struct node *remove_node_i(struct node *current_node, int idx){
+    while (idx > 0 && current_node->next != NULL) {
+            idx--;
+            current_node = current_node->next;
+        }
+    while (idx < 0 && current_node->prev != NULL) {
+            idx++;
+            current_node = current_node->prev;
+        }
+    return remove_current_node(current_node);
+}
+
 struct node *return_head(struct node *tail) {
     if (tail->prev == NULL) {
         return tail;
@@ -375,6 +321,3 @@ struct node *return_tail_i(struct node *current_node) {
 
     return current_node;
 }
-// TODO:
-// return_head
-// return_tail
