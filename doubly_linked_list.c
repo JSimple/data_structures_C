@@ -3,12 +3,8 @@
 
 /*
 TODO:
-    change remove_node so that it works like insert_node
-    create remove_before and remove_after to use in remove_node
-    make sure we've implemented all singly linked list methods on DLL
-    //add a curser structure?
-    .....then, work on trees
-    recusive is not a great idea - maybe rewrite everything itterativley or just compile w optimizations
+    - iterative functions
+    - `cursor` struct
 */
 
 struct node {
@@ -18,17 +14,27 @@ struct node {
 };
 
 void print_list(struct node*);
+void print_list_i(struct node*);
 void print_reverse_list(struct node*);
+void print_reverse_list_i(struct node*);
 struct node *insert_before(struct node*, int);
 struct node *insert_after(struct node*, int);
+struct node *remove_current_node(struct node*);
 struct node *remove_from_end(struct node*);
+struct node *remove_from_end_i(struct node*);
+struct node *remove_from_beginning_i(struct node*);
 struct node *add_to_end(struct node*, int);
+struct node *add_to_end_i(struct node*, int);
+struct node *add_to_beginning_i(struct node*, int);
 struct node *make_node(int);
 struct node *insert_node(struct node*, int, int);
-struct node *remove_node(struct node*, int);
-int delete_node(struct node*);
+struct node *insert_node_i(struct node*, int, int);
+struct node *remove_node_i(struct node*, int);
+void delete_node(struct node*);
 struct node *return_head(struct node*);
 struct node *return_tail(struct node*);
+struct node *return_head_i(struct node*);
+struct node *return_tail_i(struct node*);
 
 /* struct linked_list { */
 /*     struct node *head; */
@@ -45,13 +51,49 @@ int main() {
     node2->next = node3;
     node3->prev = node2;
 
-    struct node *node4 = make_node(5);
+    struct node *node4 = make_node(4);
     node3->next = node4;
     node4->prev = node3;
 
-    struct node *node5 = make_node(6);
-    node4->next = node5;
-    node5->prev = node4;
+    struct node *node6 = make_node(6);
+    node4->next = node6;
+    node6->prev = node4;
+
+    printf("List before adding nodes:\n");
+    print_list_i(head);
+
+    struct node *node5 = insert_node_i(head, 5, 4);
+
+    printf("List after adding first node (5):\n");
+    print_list_i(head);
+
+    struct node *node7 = insert_node_i(head, 7, 6);
+
+    printf("List after adding second node (7):\n");
+    print_list_i(head);
+
+    struct node *node_neg_1 = insert_node_i(node5, -1, -5);
+
+    printf("List after adding third node (-1):\n");
+    print_list_i(node_neg_1);
+
+    struct node *node0 = insert_node_i(node5, 0, -5);
+
+    printf("List after adding third node (0):\n");
+    print_list_i(node_neg_1);
+
+
+
+
+    // struct node *added_end_node = add_to_end_i(head, 6);
+
+    // printf("List after adding end node:\n");
+    // print_list_i(head);
+
+    // struct node *added_beginning_node = add_to_beginning_i(node4, 0);
+
+    // printf("List after adding beginning node:\n");
+    // print_reverse_list_i(added_end_node);
 
     /* INSERT NODE TESTS
         index too big
@@ -63,30 +105,30 @@ int main() {
     */
 
 
-    printf("Initial list:\n");
-    print_list(head);
+    // printf("Initial list:\n");
+    // print_list(head);
 
-    head = insert_node(node3, 0, -100);
+    // head = insert_node(node3, 0, -100);
 
-    printf("List after adding node to beginning:\n");
-    print_list(head);
+    // printf("List after adding node to beginning:\n");
+    // print_list(head);
 
-    struct node *new_middle_node = insert_node(node5, 4, -2);
+    // struct node *new_middle_node = insert_node(node5, 4, -2);
 
-    printf("List after adding node to middle:\n");
-    print_list(head);
+    // printf("List after adding node to middle:\n");
+    // print_list(head);
 
-    struct node *new_end_node = insert_node(node5, 7, 1);
+    // struct node *new_end_node = insert_node(node5, 7, 1);
 
-    printf("List after adding node to end:\n");
-    print_list(head);
+    // printf("List after adding node to end:\n");
+    // print_list(head);
 
-    printf("Trying to insert a node at 'index 0':\n");
+    // printf("Trying to insert a node at 'index 0':\n");
 
-    struct node *bad_node = insert_node(head, 100, 0);
-    print_list(head);
+    // struct node *bad_node = insert_node(head, 100, 0);
+    // print_list(head);
 
-    printf("Bad node: %i\n", bad_node);
+    // printf("Bad node: %i\n", bad_node);
 
 
 
@@ -123,13 +165,27 @@ void print_list(struct node *head) {
     }
 }
 
-//have it take tail
+void print_list_i(struct node *current_node) {
+    while (current_node != NULL) {
+        printf("%i\n", current_node->value);
+        current_node = current_node->next;
+    }
+}
+
+// have it take tail
 void print_reverse_list(struct node *head) {
     if (head->next == NULL) {
         printf("%i\n", head->value);
     } else {
         print_reverse_list(head->next);
         printf("%i\n", head->value);
+    }
+}
+
+void print_reverse_list_i(struct node *current_node) {
+    while (current_node != NULL) {
+        printf("%i\n", current_node->value);
+        current_node = current_node->prev;
     }
 }
 
@@ -141,7 +197,7 @@ struct node *make_node(int new_value){
     return new_node;
 }
 
-int delete_node(struct node *garbage_node){
+void delete_node(struct node *garbage_node){
     free(garbage_node);
 }
 
@@ -172,6 +228,18 @@ struct node *insert_after(struct node *current_node, int new_value) {
     return new_node;
 }
 
+struct node *remove_current_node(struct node *current_node) {
+    if (current_node->next != NULL) {
+        current_node->next->prev = current_node->prev;
+    }
+    if (current_node->prev != NULL) {
+        current_node->prev->next = current_node->next;
+    }
+    current_node->next = NULL;
+    current_node->prev = NULL;
+    return current_node;
+}
+
 
 struct node *remove_from_end(struct node *head){
     if (head->next == NULL) {
@@ -189,6 +257,21 @@ struct node *remove_from_end(struct node *head){
     }
 }
 
+struct node *remove_from_end_i(struct node *current_node) {
+    while (current_node->next != NULL) {
+        current_node = current_node->next;
+    }
+
+    return remove_current_node(current_node);
+}
+
+struct node *remove_from_beginning_i(struct node *current_node) {
+    while (current_node->prev != NULL) {
+        current_node = current_node->prev;
+    }
+
+    return remove_current_node(current_node);
+}
 // re-write using insert after
 struct node *add_to_end(struct node *head, int new_value) {
     if (head->next == NULL) {
@@ -201,6 +284,18 @@ struct node *add_to_end(struct node *head, int new_value) {
         // printf("not there yet...");
         return add_to_end(head->next, new_value);
     }
+}
+
+struct node *add_to_end_i(struct node *current_node, int new_value) {
+    struct node *tail = return_tail_i(current_node);
+    struct node *new_node = insert_after(tail, new_value);
+    return new_node;
+}
+
+struct node *add_to_beginning_i(struct node *current_node, int new_value) {
+    struct node *head = return_head_i(current_node);
+    struct node *new_node = insert_before(head, new_value);
+    return new_node;
 }
 
 struct node *insert_node(struct node *current_node, int new_value, int idx) {
@@ -228,98 +323,26 @@ struct node *insert_node(struct node *current_node, int new_value, int idx) {
     }
 }
 
-
-struct node *remove_node(struct node *current_node, int idx) {
-    if (idx == 0){
-        if (current_node->next != NULL) {
-            current_node->next->prev = current_node->prev;
-        }
-        if (current_node->prev != NULL) {
-            current_node->prev->next = current_node->next;
-        }
-        current_node->next = NULL;
-        current_node->prev = NULL;
-        return current_node;
-
-        // if (current_node->next != NULL && current_node->prev != NULL){
-        //     current_node->prev->next = current_node->next;
-        //     current_node->next->prev = current_node->prev;
-        //     current_node->next, current_node->prev = NULL;
-        //     return current_node;
-        // }
-        // else if (current_node->next != NULL){
-        //     current_node->next->prev, current_node->next = NULL;
-        //     return current_node;
-        // }
-        // else if (current_node->prev != NULL){
-        //     current_node->prev->next, current_node->prev = NULL;
-        //     return current_node;
-        // }
-        // else{
-        //     return current_node;
-        // }
-    }
-    if (idx > 0){
-        if (current_node->next == NULL){
-            return (remove_node(current_node, 0));
-        }
-        return(remove_node(current_node->next, idx-1));
-    }
-    else{
-        if (current_node->prev == NULL){
-            return (remove_node(current_node, 0));
-        }
-        return(remove_node(current_node->prev, idx+1));
-    }
-
+struct node *insert_node_i(struct node *current_node, int new_value, int idx) {
     if (idx > 0) {
-        if (current_node->next == NULL){
-
-            //struct node *new_node = remove_after(current_node);
-            return new_node;
-        } else if (idx == 1){
-            //struct node *new_node = remove_after(current_node);
-            return new_node;
+        while (idx > 1 && current_node->next != NULL) {
+            idx--;
+            current_node = current_node->next;
         }
-        return remove_node(current_node->next, idx-1);
+        struct node *new_node = insert_after(current_node, new_value);
+        return new_node;
     } else if (idx < 0) {
-        if (current_node->prev == NULL) {
-           //struct node *new_node = remove_before(current_node);
-           return new_node;
-        } else if (idx == -1) {
-            //struct node *new_node = remove_before(current_node);
+        while (idx < -1 && current_node->prev != NULL) {
+            idx++;
+            current_node = current_node->prev;
         }
-        return remove_node(current_node->prev, idx+1);
+        struct node *new_node = insert_before(current_node, new_value);
+        return new_node;
     } else {
-        //printf("Please enter a non-zero integer for the index!\n"); remove current node
+        printf("Please enter a non-zero integer for the index!\n");
         return NULL;
     }
 }
-
-
-// struct node *remove_node(struct node *current_node, int idx){
-//     if (current_node->next == NULL){
-//         printf("List is just one node. Stop trying to remove nodes!");
-//         return current_node;
-//     }
-//     if (current_node->next->next == NULL){
-//         if (idx > 1){
-//             printf("Index exceeds list length!");
-//             return current_node->next;
-//         }
-//         else {
-//             struct node *removed_node = current_node->next;
-//             return remove_from_end(current_node);
-//         }
-//     }
-//     else if(idx <= 1){
-//         struct node *removed_node = current_node->next;
-//         current_node->next = removed_node->next;
-//         removed_node->next = NULL;
-//         return removed_node;
-//     }
-//     return remove_node(current_node->next, idx-1);
-// }
 
 struct node *return_head(struct node *tail) {
     if (tail->prev == NULL) {
@@ -327,6 +350,14 @@ struct node *return_head(struct node *tail) {
     } else {
         return return_head(tail->prev);
     }
+}
+
+struct node *return_head_i(struct node *current_node) {
+    while (current_node->prev != NULL) {
+        current_node = current_node->prev;
+    }
+
+    return current_node;
 }
 
 struct node *return_tail(struct node *head) {
@@ -337,6 +368,13 @@ struct node *return_tail(struct node *head) {
     }
 }
 
+struct node *return_tail_i(struct node *current_node) {
+    while (current_node->next != NULL) {
+        current_node = current_node->next;
+    }
+
+    return current_node;
+}
 // TODO:
 // return_head
 // return_tail
