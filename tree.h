@@ -21,6 +21,8 @@ struct tree {
 treenode * insert_node(treenode*, int val, int side);
 treenode * insert_sorted(treenode * root, int val);
 int side_is_full(treenode * node, int side);
-int print_tree(treenode * node);
+int print_node(treenode * node);
+int print_tree_in_order(treenode * node);
 int print_tree_hello ();
+int in_order_map(treenode * node, int (*f)(treenode *));
 #endif // TREE_H_

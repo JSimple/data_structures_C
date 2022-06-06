@@ -101,21 +101,10 @@ treenode * insert_sorted(struct treenode * root,int val){
 }
 
 
-int print_tree(treenode * node){
-    if (node == NULL) {
-        return -1;
-    }
-    print_tree(node->left);
-    printf("%d\n", node->val);
-    print_tree(node->right);
-    //printf("\n");
-    return 0;
-}
-
 int print_asci_tree(treenode * root){
-    int l_depth = 0;
-    int r_depth = 0;
-    
+    printf("Not yet.... hehe\n");
+    return 0;
+
 /*
 
 spaces = lnode depth * 2 + lsibling spaces?
@@ -128,8 +117,37 @@ spaces = lnode depth * 2 + lsibling spaces?
        12
         \
         14
-*/  
+*/
 
+}
+
+int print_node(treenode * node) {
+    printf("%d\n", node->val);
+    return 0;
+}
+
+int print_tree_in_order(treenode * node){
+    // if (node == NULL) {
+    //     return -1;
+    // }
+    // print_tree(node->left);
+    // printf("%d\n", node->val);
+    // print_tree(node->right);
+    // //printf("\n");
+    // return 0;
+
+    return in_order_map(node, print_node);
+}
+
+int in_order_map(treenode * node, int (*f)(treenode * subnode)) {
+    if (node == NULL) {
+        return -1;
+    }
+    in_order_map(node->left, f);
+    f(node);
+    in_order_map(node->right, f);
+
+    return 0;
 }
 
 int main(int argc, char ** argv) {
@@ -142,7 +160,7 @@ int main(int argc, char ** argv) {
     root.val = 0;
     root.left = NULL;
     root.right = NULL;
-    
+
     insert_sorted(&root, 8);
     insert_sorted(&root, 1);
     insert_sorted(&root, 3);
@@ -150,5 +168,6 @@ int main(int argc, char ** argv) {
     insert_sorted(&root, 5);
     insert_sorted(&root, 1);
 
-    print_tree(&root);
+    print_tree_in_order(&root);
 }
+
