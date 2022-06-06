@@ -118,10 +118,10 @@ int print_asci_tree(treenode * root){
     
 /*
 
-number of spaces to the left of node is proportional to left child depth
-   6
-  /\
- 4  7
+spaces = lnode depth * 2 + lsibling spaces?
+    6
+   /\
+  4  7
  /\ /\
 3 5 6 10
        \
