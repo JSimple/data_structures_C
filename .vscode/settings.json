@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    ".gitignore": "shellscript",
+    "linked_list.h": "c"
+  }
+}
