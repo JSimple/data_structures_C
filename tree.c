@@ -3,8 +3,10 @@
 // the contents where the include goes
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "tree.h"
+#include "linked_list.h"
 
 
 int print_tree_hello() {
@@ -14,6 +16,7 @@ int print_tree_hello() {
 }
 
 int side_is_full(treenode * node, int side) {
+    // right = 1; left = 0
     if (node == NULL) {
         // Given invalid node to check, this is error
         return -1;
@@ -101,28 +104,9 @@ treenode * insert_sorted(struct treenode * root,int val){
 }
 
 
-int print_asci_tree(treenode * root){
-    printf("Not yet.... hehe\n");
-    return 0;
-
-/*
-
-spaces = lnode depth * 2 + lsibling spaces?
-    6
-   /\
-  4  7
- /\ /\
-3 5 6 10
-       \
-       12
-        \
-        14
-*/
-
-}
 
 int print_node(treenode * node) {
-    printf("%d\n", node->val);
+    printf("%i\n", node->val);
     return 0;
 }
 
@@ -150,6 +134,57 @@ int in_order_map(treenode * node, int (*f)(treenode * subnode)) {
     return 0;
 }
 
+int in_order_map_i(treenode * root, int(*f)(treenode * subnode)) {
+    // assert that the size of a pointer to a treenode will not
+    // exceed the max size of `int` type
+    assert(sizeof(int) == sizeof(void *));
+    assert(root != NULL);
+
+    struct treenode *current = root;
+    struct node *list = make_node(root);
+
+    while (!is_empty(list)) {
+        if (current->right != NULL) {
+            (void)add_to_end(list, current->right);
+        }
+
+        if (current->left != NULL) {
+            current = current->left;
+            (void)add_to_end(list, current);
+        } else {
+            struct node *popped_node = remove_from_end(list);
+            f(popped_node);
+            // backtracking
+        }
+    }
+
+    return 0;
+}
+
+int pre_order_map(treenode * node, int (*f)(treenode * subnode)) {
+    if (node == NULL) {
+        return -1;
+    }
+
+    f(node);
+    pre_order_map(node->left, f);
+    pre_order_map(node->right, f);
+
+    return 0;
+}
+
+int post_order_map(treenode * node, int (*f)(treenode * subnode)) {
+    if (node == NULL) {
+        return -1;
+    }
+
+    post_order_map(node->left, f);
+    post_order_map(node->right, f);
+    f(node);
+
+    return 0;
+}
+
 int main(int argc, char ** argv) {
     //if (argc > 1) {
     //        printf("argv[1]: %s\n", argv[1]);
@@ -157,7 +192,7 @@ int main(int argc, char ** argv) {
 
     print_tree_hello();
     treenode root;
-    root.val = 0;
+    root.val = 4;
     root.left = NULL;
     root.right = NULL;
 
@@ -166,8 +201,12 @@ int main(int argc, char ** argv) {
     insert_sorted(&root, 3);
     insert_sorted(&root, 2);
     insert_sorted(&root, 5);
-    insert_sorted(&root, 1);
+    insert_sorted(&root, 0);
 
-    print_tree_in_order(&root);
+    // print_tree_in_order(&root);
+
+    printf("testing iterative in order traversal:\n");
+
+    in_order_map_i(&root, print_node);
 }
 

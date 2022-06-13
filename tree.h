@@ -1,5 +1,7 @@
-#ifndef TREE_H_
-#define TREE_H_
+#ifndef __TREE_H_
+#define __TREE_H_
+
+#include "linked_list.h"
 
 typedef struct treenode treenode;
 
@@ -19,10 +21,13 @@ struct tree {
 
 // inserts a node and returns pointer to newly added node
 treenode * insert_node(treenode*, int val, int side);
-treenode * insert_sorted(treenode * root, int val);
-int side_is_full(treenode * node, int side);
-int print_node(treenode * node);
-int print_tree_in_order(treenode * node);
+treenode * insert_sorted(treenode *root, int val);
+int side_is_full(treenode *node, int side);
+int print_node(treenode *node);
+int print_tree_in_order(treenode *node);
 int print_tree_hello ();
-int in_order_map(treenode * node, int (*f)(treenode *));
-#endif // TREE_H_
+int in_order_map(treenode *node, int (*f)(treenode *));
+int in_order_map_i(treenode *node, int (*f)(treenode *));
+int pre_order_map(treenode *node, int (*f)(treenode *));
+int post_order_map(treenode *node, int (*f)(treenode *));
+#endif // __TREE_H_

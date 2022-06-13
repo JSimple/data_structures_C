@@ -1,24 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-struct node {
-    int value;
-    struct node *next;
-};
-
-void print_list(struct node*);
-struct node *make_node(int);
-int delete_node(struct node*);
-struct node *remove_node(struct node*, int);
-struct node *add_to_beginning(struct node*, int);
-struct node *add_to_end(struct node*, int);
-struct node *remove_from_beginning(struct node*);
-struct node *remove_from_end(struct node*);
-struct node *insert_at_index(struct node*, int, int);
-
-/* struct linked_list { */
-/*     struct node *head; */
-/* }; */
+#include "linked_list.h"
 
 int main() {
     struct node *head = make_node(6);
@@ -57,6 +41,7 @@ void print_list(struct node *head) {
     }
 }
 
+// TODO: add handling of malloc failure
 struct node *make_node(int new_value){
     struct node *new_node = (struct node *) malloc(sizeof(struct node));
     new_node->value = new_value;
@@ -150,4 +135,8 @@ struct node *remove_node(struct node *head, int idx){
         return removed_node;
     }
     return remove_node(head->next, idx-1);
+}
+
+bool is_empty(struct node *head) {
+    return head == NULL;
 }
