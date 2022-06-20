@@ -1,0 +1,7 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/josephinesimple/Desktop/code/RC/data_structures_C'
+clang  -std=c11 -Wall -Wextra -Wpedantic -O3 -o tree.o -c tree.c
+clang -o tree-test  -std=c11 -Wall -Wextra -Wpedantic -O3  ll.o 
+ 
+make: Leaving directory `/Users/josephinesimple/Desktop/code/RC/data_structures_C'
+ 

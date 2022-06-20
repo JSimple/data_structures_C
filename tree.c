@@ -6,8 +6,7 @@
 #include <assert.h>
 
 #include "tree.h"
-#include "linked_list.h"
-
+#include "linked_list_generic.h"
 
 int print_tree_hello() {
     printf("hello from tree.c\n");
@@ -137,24 +136,20 @@ int in_order_map(treenode * node, int (*f)(treenode * subnode)) {
 int in_order_map_i(treenode * root, int(*f)(treenode * subnode)) {
     // assert that the size of a pointer to a treenode will not
     // exceed the max size of `int` type
-    assert(sizeof(int) == sizeof(void *));
     assert(root != NULL);
 
     struct treenode *current = root;
-    struct node *list = make_node(root);
+    struct node *list = make_node(NULL);
 
-    while (!is_empty(list)) {
-        if (current->right != NULL) {
-            (void)add_to_end(list, current->right);
-        }
-
+    while (!is_empty(list) && current != NULL) {
         if (current->left != NULL) {
-            current = current->left;
             (void)add_to_end(list, current);
+            current = current->left;
         } else {
-            struct node *popped_node = remove_from_end(list);
-            f(popped_node);
-            // backtracking
+            current = remove_from_end(list);
+            f(current);
+            if (current->right != NULL) {
+                current = current->right;
         }
     }
 
