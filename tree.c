@@ -146,13 +146,13 @@ int in_order_map_i(treenode * root, int(*f)(treenode * subnode)) {
             (void)add_to_end(list, current);
             current = current->left;
         } else {
-            current = remove_from_end(list);
+            current = remove_from_end(list)->value;
             f(current);
             if (current->right != NULL) {
                 current = current->right;
+            }
         }
     }
-
     return 0;
 }
 

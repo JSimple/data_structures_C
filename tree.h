@@ -1,7 +1,7 @@
 #ifndef __TREE_H_
 #define __TREE_H_
 
-#include "linked_list.h"
+#include "linked_list_generic.h"
 
 typedef struct treenode treenode;
 

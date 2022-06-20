@@ -8,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Mon Jun 20 16:12:12 2022
+# Make data base, printed on Mon Jun 20 17:00:36 2022
 
 # Variables
 
@@ -126,12 +126,12 @@ TMPDIR = /var/folders/q5/pf0rlpm10yn_vt6vdlnfjsdc0000gn/T/
 # environment
 VSCODE_IPC_HOOK = /Users/josephinesimple/Library/Application Support/Code/1.68.1-main.sock
 # makefile
+ 
 MAKEFLAGS = Rrqp
 # environment
 MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
- 
 # environment
 TERM_PROGRAM_VERSION = 445
 # environment
@@ -173,7 +173,7 @@ VSCODE_PID = 14198
 # environment
 _CE_CONDA = 
 # variable set hash-table stats:
-# Load=79/1024=8%, Rehash=0, Collisions=1/107=1%
+# Load=79/1024=8%, Rehash=0, Collisions=1/102=1%
 
 # Pattern-specific Variable Values
 
@@ -181,16 +181,16 @@ _CE_CONDA =
 
 # Directories
 
-# . (device 16777232, inode 20079252): 20 files, 1 impossibilities.
+# . (device 16777232, inode 20079252): 23 files, no impossibilities.
 
-# 20 files, 1 impossibilities in 1 directories.
+# 23 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 %.c:
 
 %.o: %.c
-#  commands to execute (from `Makefile', line 21):
+#  commands to execute (from `Makefile', line 23):
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 	
 
@@ -200,16 +200,24 @@ _CE_CONDA =
 
 # Files
 
+# Not a target:
+cut:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+Simple: my internet cut out
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+Josephine: my internet cut out
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 all: tree-test
 #  Command-line target.
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Needs to be updated (-q is set).
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
-
-ll.o: linked_list_generic.c linked_list_generic.h
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has been updated.
@@ -217,15 +225,21 @@ ll.o: linked_list_generic.c linked_list_generic.h
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-tree-test: ll.o linked_list_generic.h tree.o tree.h
+# Not a target:
+.o:
 #  Implicit rule search has not been done.
-#  File does not exist.
+#  Modification time never checked.
+#  File has not been updated.
+
+tree-test: linked_list_generic.o linked_list_generic.h tree.o tree.h
+#  Implicit rule search has not been done.
+#  Last modified 2022-06-20 16:59:50
 #  File has been updated.
-#  Needs to be updated (-q is set).
+#  Successfully updated.
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 #  commands to execute (from `Makefile', line 14):
-	$(CC) -o $@ $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) ll.o $(LDLIBS)
+	$(CC) -o $@ $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) linked_list_generic.o tree.o $(LDLIBS)
 	
 
 .SUFFIXES: .c .o
@@ -236,11 +250,39 @@ tree-test: ll.o linked_list_generic.h tree.o tree.h
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-20 16:11:25
+#  Last modified 2022-06-20 16:52:19
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+(she/they): my internet cut out
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+(SP2'22): my internet cut out
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+linked_list_generic.o: linked_list_generic.c linked_list_generic.c linked_list_generic.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `linked_list_generic'
+#  Last modified 2022-06-20 16:59:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 23):
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
+	
+
+# Not a target:
+out:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 .c:
@@ -252,11 +294,12 @@ Makefile:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 21):
+#  commands to execute (from `Makefile', line 23):
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 	
 
 .POSIX:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -267,39 +310,28 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-tree.o: tree.c tree.h
+# Not a target:
+my:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+tree.o: tree.c tree.c tree.h
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: `tree'
-#  Last modified 1969-12-31 18:59:56
+#  Last modified 2022-06-20 16:59:50
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := tree.o
-# automatic
-# % := 
-# automatic
-# * := tree
-# automatic
-# + := tree.c tree.c tree.h
-# automatic
-# | := 
-# automatic
-# < := tree.c
-# automatic
-# ^ := tree.c tree.h
-# automatic
-# ? := tree.c tree.h
+#  Successfully updated.
 # variable set hash-table stats:
- 
-# Load=8/32=25%, Rehash=0, Collisions=1/15=7%
-#  commands to execute (from `Makefile', line 21):
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 23):
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ -c $<
 	
 
 # Not a target:
 tree.c:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-20 15:15:05
+#  Last modified 2022-06-20 16:34:19
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -309,8 +341,8 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 17):
-	rm -f tree-test ll.o tree.o
+#  commands to execute (from `Makefile', line 19):
+	rm -f tree-test linked_list_generic.o tree.o
 	
 
 # Not a target:
@@ -325,29 +357,34 @@ linked_list_generic.c:
 # Not a target:
 tree.h:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-13 23:38:42
+#  Last modified 2022-06-20 16:22:13
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+internet:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 # Not a target:
 linked_list_generic.h:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-20 15:29:19
+#  Last modified 2022-06-20 16:22:31
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-# Not a target:
-.o:
+Maya: my internet cut out
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=16/1024=2%, Rehash=0, Collisions=8/48=17%
+# Load=25/1024=2%, Rehash=0, Collisions=5/77=6%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -359,6 +396,6 @@ linked_list_generic.h:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Mon Jun 20 16:12:12 2022
+# Finished Make data base on Mon Jun 20 17:00:36 2022
 
  
